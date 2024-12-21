@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALWAYS READY Blog Service</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            color: #FF6347; /* Bright orange-red */
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4CAF50; /* Green */
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .blog-form {
+            background-color: #FFEB3B; /* Yellow */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #FF6347; /* Bright orange-red */
+            color: white;
+            font-size: 18px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FF4500; /* Darker red */
+        }
+
+        .blog-posts {
+            margin-top: 40px;
+        }
+
+        .blog-post {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .footer a {
+            color: #FF6347;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ALWAYS READY Blog Service</h1>
+        <h2>Post Your Blog</h2>
+
+        <!-- Blog Post Form -->
+        <div class="blog-form">
+            <input type="text" id="blogTitle" placeholder="Blog Title" required>
+            <textarea id="blogContent" placeholder="Write your blog here..." rows="8" required></textarea>
+            <button onclick="submitBlog()">Post Blog</button>
+        </div>
+
+        <!-- Blog Posts Section -->
+        <div class="blog-posts" id="blogPosts">
+            <!-- User blog posts will appear here -->
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>A JKST PRODUCT | For any queries, contact <a href="mailto:jksuperteamhelp@gmail.com">jksuperteamhelp@gmail.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle the dynamic blog posting
+        function submitBlog() {
+            const title = document.getElementById('blogTitle').value;
+            const content = document.getElementById('blogContent').value;
+
+            if (title && content) {
+                const blogPostSection = document.getElementById('blogPosts');
+                const blogPostDiv = document.createElement('div');
+                blogPostDiv.classList.add('blog-post');
+
+                blogPostDiv.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>${content}</p>
+                `;
+                
+                blogPostSection.prepend(blogPostDiv);
+
+                // Clear the form
+                document.getElementById('blogTitle').value = '';
+                document.getElementById('blogContent').value = '';
+            } else {
+                alert('Please fill in both the title and content fields.');
+            }
+        }
+    </script>
+</body>
+</html>
