@@ -142,29 +142,32 @@
 
     <script>
         // JavaScript to handle the dynamic blog posting
-        function submitBlog() {
-            const title = document.getElementById('blogTitle').value;
-            const content = document.getElementById('blogContent').value;
+    function submitBlog() {
+        const title = document.getElementById('blogTitle').value;
+        const content = document.getElementById('blogContent').value;
 
-            if (title && content) {
-                const blogPostSection = document.getElementById('blogPosts');
-                const blogPostDiv = document.createElement('div');
-                blogPostDiv.classList.add('blog-post');
+        if (title && content) {
+            const blogPostSection = document.getElementById('blogPosts');
+            const blogPostDiv = document.createElement('div');
+            blogPostDiv.classList.add('blog-post');
 
-                blogPostDiv.innerHTML = `
-                    <h3>${title}</h3>
-                    <p>${content}</p>
-                `;
-                
-                blogPostSection.prepend(blogPostDiv);
+            // Generate a related image URL based on the title using Pexels
+            const query = encodeURIComponent(title.split(' ').join('+'));
+            const imageUrl = `https://images.pexels.com/photos/67636/pexels-photo-67636.jpeg?auto=compress&cs=tinysrgb&h=350&keywords=${query}`;
 
-                // Clear the form
-                document.getElementById('blogTitle').value = '';
-                document.getElementById('blogContent').value = '';
-            } else {
-                alert('Please fill in both the title and content fields.');
-            }
+            blogPostDiv.innerHTML = `
+                <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/1200x600?text=Blog+Image';" alt="Blog Image">
+                <h3>${title}</h3>
+                <p>${content}</p>
+            `;
+            blogPostSection.prepend(blogPostDiv);
+
+            document.getElementById('blogTitle').value = '';
+            document.getElementById('blogContent').value = '';
+        } else {
+            alert('Please fill in both the title and content fields.');
         }
-    </script>
+    }
+</script>
 </body>
 </html>
