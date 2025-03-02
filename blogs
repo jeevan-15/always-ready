@@ -140,34 +140,80 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript to handle the dynamic blog posting
-    function submitBlog() {
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js"></script>
+
+<script>
+    // Firebase Configuration (Replace with your Firebase project config)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkIASy_tpZSIMIJXNCa9gXWfsS5cfc-Fs",
+        authDomain: "jk-super-team-app.firebaseapp.com",
+        projectId: "jk-super-team-app",
+        storageBucket: "jk-super-team-app.firebasestorage.app",
+        messagingSenderId: "266031575595",
+        appId: "1:266031575595:web:7e813728ac628b3531306e"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function fetchImage(query) {
+        // Dummy function for fetching image (Replace with your API if needed)
+        return 'https://via.placeholder.com/1200x600?text=Blog+Image';
+    }
+
+    async function submitBlog() {
         const title = document.getElementById('blogTitle').value;
         const content = document.getElementById('blogContent').value;
 
         if (title && content) {
-            const blogPostSection = document.getElementById('blogPosts');
-            const blogPostDiv = document.createElement('div');
-            blogPostDiv.classList.add('blog-post');
+            const imageUrl = await fetchImage(title);
 
-            // Generate a related image URL based on the title using Pexels
-            const query = encodeURIComponent(title.split(' ').join('+'));
-            const imageUrl = `https://images.pexels.com/photos/67636/pexels-photo-67636.jpeg?auto=compress&cs=tinysrgb&h=350&keywords=${query}`;
-
-            blogPostDiv.innerHTML = `
-                <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/1200x600?text=Blog+Image';" alt="Blog Image">
-                <h3>${title}</h3>
-                <p>${content}</p>
-            `;
-            blogPostSection.prepend(blogPostDiv);
-
-            document.getElementById('blogTitle').value = '';
-            document.getElementById('blogContent').value = '';
+            // Store in Firestore
+            db.collection("blogs").add({
+                title: title,
+                content: content,
+                imageUrl: imageUrl,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                alert("Blog posted successfully!");
+                loadBlogs(); // Refresh blog list
+                document.getElementById('blogTitle').value = '';
+                document.getElementById('blogContent').value = '';
+            })
+            .catch(error => console.error("Error posting blog:", error));
         } else {
             alert('Please fill in both the title and content fields.');
         }
     }
+
+    function loadBlogs() {
+        const blogPostSection = document.getElementById('blogPosts');
+        blogPostSection.innerHTML = "";
+
+        db.collection("blogs").orderBy("timestamp", "desc").get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                let blog = doc.data();
+                let blogPostDiv = document.createElement('div');
+                blogPostDiv.classList.add('blog-post');
+
+                blogPostDiv.innerHTML = `
+                    <img src="${blog.imageUrl}" alt="Blog Image">
+                    <h3>${blog.title}</h3>
+                    <p>${blog.content}</p>
+                `;
+                blogPostSection.appendChild(blogPostDiv);
+            });
+        })
+        .catch(error => console.error("Error loading blogs:", error));
+    }
+
+    window.onload = loadBlogs; // Load blogs when the page loads
 </script>
+
 </body>
 </html>
